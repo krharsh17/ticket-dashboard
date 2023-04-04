@@ -21,27 +21,27 @@ import { useEffect } from "react";
 
 const TicketDashboard = () => {
 
-  // Store your Zendesk Base URL here for accessing it in the Table before env variables are set up
-  const zendeskBaseUrl = "https://draft6776.zendesk.com";
+  // Store your Zendesk subdomain here for accessing it in the Table before env variables are set up
+  const zendeskSubdomain = "draft6776";
 
-  // Create states for Aiplane components
-  const { values: asanaTaskFormValues } = useComponentState("asanaTaskForm");
+  // Create states for Airplane components
+  const { values: hiveTaskFormValues } = useComponentState("hiveTaskForm");
   const openTicketsState = useComponentState("openTickets")
-  const asanaTaskName = useComponentState("name")
+  const hiveTaskTitle = useComponentState("title")
   const zendeskTicketId = useComponentState("zendesk_id")
-  const asanaNotes = useComponentState("notes")
+  const hiveTaskDescription = useComponentState("description")
 
-  // Create a mutation to call the createAsanaTask task with parameters
-  const { mutate: createAsanaTask } = useTaskMutation({
-    slug: "create_asana_task",
+  // Create a mutation to call the createHiveTask task with parameters
+  const { mutate: createHiveTask } = useTaskMutation({
+    slug: "create_hive_task",
     params: {
-      ...asanaTaskFormValues,
+      ...hiveTaskFormValues,
     },
     onSuccess: (output) => {
-      alert(`Created Asana Task ${output[0].id}`);
+      alert(`Created Hive Task ${output[0].id}`);
     },
     onError: (error) => {
-      alert(`Failed creating Asana Task with error:`);
+      alert(`Failed creating Hive Task with error:`);
     },
   });
 
@@ -49,14 +49,14 @@ const TicketDashboard = () => {
   useEffect(() => {
     const selectedRow = openTicketsState.selectedRow
     if (openTicketsState && selectedRow) {
-      asanaTaskName.setValue(selectedRow.title)
+      hiveTaskTitle.setValue(selectedRow.title)
       zendeskTicketId.setValue(selectedRow.id)
-      asanaNotes.setValue(selectedRow.description)
+      hiveTaskDescription.setValue(selectedRow.description)
     }
   }, [openTicketsState.selectedRow])
 
   // Create a template for generating the URL of the "Open in ZenDesk" button
-  const openInZenDeskLink = (ticketId: string) => (zendeskBaseUrl + "/agent/tickets/" + ticketId)
+  const openInZenDeskLink = (ticketId: string) => ("https://" + zendeskSubdomain + ".zendesk.com/agent/tickets/" + ticketId)
 
   return (
     <Stack>
@@ -76,31 +76,19 @@ const TicketDashboard = () => {
 
       <Heading level={5}>Assign a Ticket</Heading>
       <Form
-        id="asanaTaskForm"
+        id="hiveTaskForm"
         onSubmit={() => {
-          createAsanaTask();
+          createHiveTask();
           openTicketsState.clearSelection();
         }}
         resetOnSubmit
       >
         <TextInput id="zendesk_id" label="Zendesk ticket id" defaultDisabled />
-        <TextInput id="name" label="Asana task name" required />
-        <Select
-          id="workspace_id"
-          label="Asana workspace"
-          task="list_asana_workspaces"
-          outputTransform={(workspaces) =>
-            workspaces.map((t) => ({
-              value: t.id,
-              label: t.name,
-            }))
-          }
-          required
-        />
+        <TextInput id="title" label="Hive task title" required />
         <Select
           id="assignee_id"
-          label="Asana assignee"
-          task="list_asana_users"
+          label="Hive assignee"
+          task="list_hive_users"
           outputTransform={(users) =>
             users.map((u) => ({
               value: u.id,
@@ -109,8 +97,8 @@ const TicketDashboard = () => {
           }
           required
         />
-        <DatePicker id="due_date" label="Due date" />
-        <Textarea id="notes" label="Task Notes" />
+        <DatePicker id="deadline" label="Deadline" />
+        <Textarea id="description" label="Task Description" />
       </Form>
       <Divider labelPosition="center" />
       <Metrics />
