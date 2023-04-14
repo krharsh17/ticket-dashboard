@@ -12,7 +12,7 @@ export default airplane.task(
 			HIVE_WORKSPACE_ID: {config: "HIVE_WORKSPACE_ID"},
 		},
 	},
-	// This is your task's entrypoint. When your task is executed, this
+	// This is your task's entry point. When your task is executed, this
 	// function will be called.
 	async () => {
 		// Extract the API secrets from env variables
