@@ -12,7 +12,7 @@ export default airplane.task(
 			ZENDESK_PASSWORD: { config: "ZENDESK_PASSWORD" }
 		}
 	},
-	// This is your task's entrypoint. When your task is executed, this
+	// This is your task's entry point. When your task is executed, this
 	// function will be called.
 	async () => {
 
