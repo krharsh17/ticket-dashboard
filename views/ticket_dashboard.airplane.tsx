@@ -55,8 +55,8 @@ const TicketDashboard = () => {
     }
   }, [openTicketsState.selectedRow])
 
-  // Create a template for generating the URL of the "Open in ZenDesk" button
-  const openInZenDeskLink = (ticketId: string) => ("https://" + zendeskSubdomain + ".zendesk.com/agent/tickets/" + ticketId)
+  // Create a template for generating the URL of the "Open in Zendesk" button
+  const openInZendeskLink = (ticketId: string) => ("https://" + zendeskSubdomain + ".zendesk.com/agent/tickets/" + ticketId)
 
   return (
     <Stack>
@@ -69,8 +69,8 @@ const TicketDashboard = () => {
         columns={openConversationsCols}
         rowActions={{
           variant: "subtle",
-          href: (row) => openInZenDeskLink(row.id),
-          label: "Open in ZenDesk",
+          href: (row) => openInZendeskLink(row.id),
+          label: "Open in Zendesk",
         }}
       />
 
